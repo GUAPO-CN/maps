@@ -1,0 +1,53 @@
+//供地图所有公共样式使用
+@keyframes bigBmap {
+  from {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+}
+@keyframes bigGmap {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.3);
+  }
+}
+
+.cluster_common_style_small{
+  line-height: 20px !important;
+  color: #fff;
+  font-size: 14px;
+  font-family: SFProText-Medium, SFProText;
+  font-weight: 500;
+  background: #6939C6;
+  border-radius: 40px;
+  border: 2px solid #FFFFFF !important;
+  padding: 4px 10px;
+}
+
+//baidu 聚合点
+.cluster_text{
+  .cluster_common_style_small;
+  transform: translate(-50%, -50%);
+}
+.cluster_text_big{
+  .cluster_common_style_small;
+  transform: translate(-50%, -50%);
+  animation: bigBmap 0.1s ease-in 1 normal forwards;
+}
+
+//google 聚合点
+.cluster_style {
+  .cluster_text_gmap {
+    .cluster_common_style_small;
+  }
+}
+.cluster_style_big {
+  .cluster_text_gmap {
+    .cluster_common_style_small;
+    animation: bigGmap 0.1s ease-in 1 normal forwards;
+  }
+}

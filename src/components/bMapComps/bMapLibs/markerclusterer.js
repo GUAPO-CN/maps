@@ -101,7 +101,10 @@ var indexOf = function (item, source) {
  *    isAverangeCenter {Boolean} 聚合点的落脚位置是否是所有聚合在内点的平均值，默认为否，落脚在聚合内的第一个点<br />
  *    styles {Array<IconStyle>} 自定义聚合后的图标风格，请参考TextIconOverlay类<br />
  */
-var MarkerClusterer = function (map, options) {
+let num = 0
+ var MarkerClusterer = function (map, options) {
+   num++
+   console.log(num,'创建了两次 MarkerClusterer');
   try {
     BMap;
   } catch (e) {
@@ -144,6 +147,7 @@ var MarkerClusterer = function (map, options) {
  * @return 无返回值。
  */
 MarkerClusterer.prototype.addMarkers = function (markers) {
+  // console.log(markers);
   if (!markers.length) {
     return
   }
@@ -165,6 +169,7 @@ MarkerClusterer.prototype._pushMarkerTo = function (marker) {
     marker.isInCluster = false;
     this._markers.push(marker); //Marker拖放后enableDragging不做变化，忽略
   }
+  // console.log(this._markers,'_pushMarkerTo');
 };
 
 /**
@@ -183,15 +188,19 @@ MarkerClusterer.prototype.addMarker = function (marker) {
  */
 MarkerClusterer.prototype._createClusters = function () {
   var mapBounds = this._map.getBounds();
+  // console.log(mapBounds);
   if (!mapBounds.getCenter()) {
     return
   }
   var extendedBounds = getExtendedBounds(this._map, mapBounds, this._gridSize);
+  //什么时候将 this._markers给清空了？
+  // console.log(this._markers,'this._markers');
   for (var i = 0, marker; marker = this._markers[i]; i++) {
     if (!marker.isInCluster && extendedBounds.containsPoint(marker.getPosition())) {
       this._addToClosestCluster(marker);
     }
   }
+  // console.log(this._clusters,'_clusters');
   var len = this._markers.length;
   for (var i = 0; i < len; i++) {
     if (this._clusters[i]) {
@@ -323,6 +332,7 @@ MarkerClusterer.prototype.removeMarkers = function (markers) {
 MarkerClusterer.prototype.clearMarkers = function () {
   this._clearLastClusters();
   this._removeMarkersFromMap();
+  // console.log('object');
   this._markers = [];
 };
 
@@ -537,6 +547,16 @@ Cluster.prototype.render = function () {
       this._map.addOverlay(this._markers[i]);
     }
   } else {
+    // if (this._isAverageCenter) {
+    //   var l = this._markers.length;
+    //   let lat = 0, lng =0;
+    //   this._markers.forEach(item => {
+    //     lat += item.point.lat
+    //     lng += item.point.lng
+    //   })
+    //   this._center = new BMap.Point(lng/l, lat/l);
+    //   this.updateGridBounds();
+    // } //计算新的Center
     this._map.addOverlay(this._clusterMarker);
     this._isReal = true;
     this.updateClusterMarker();

@@ -16,7 +16,7 @@
         scrollwheel: true
       }"
     >
-      <GmapCluster
+      <TmxGmapCluster
         clusterClass="cluster_style"
         :minimum-cluster-size="2"
         :grid-size="60"
@@ -24,23 +24,22 @@
         :max-zoom="18"
         :styles="[{textSize: 20,textColor:'white',width:30,height:30}]"
         :zoomOnClick='true'
-        @click="gooclick"
+      >
+        <!-- @click="gooclick"
         @mouseover="goomouseover"
         @mouseout="goomouseout"
-        @rightclick="goorightclick"
-      >
-        <GmapMarkerWithLabel
+        @rightclick="goorightclick" -->
+        <TmxGmapMarker
           v-for="(marker,index) of markers" 
           :key="index"
-          class="aaaaa"
           :position="{lng: marker.lng, lat: marker.lat}"
           :title="marker.time+marker.sn+'\n'+marker.lng+','+marker.lat"
           :icon="marker.icon"
           :label="label(marker)"
-          @click="toggleInfoWindow(marker,index)"
         >
-        </GmapMarkerWithLabel>
-      </GmapCluster>
+          <!-- @click="toggleInfoWindow(marker,index)" -->
+        </TmxGmapMarker>
+      </TmxGmapCluster>
       <!-- <mGmapInfoWindow 
         ref="infowindow"
         v-for="(marker,index) of markers"
@@ -73,6 +72,9 @@
 import GmapCluster from './googleComp/cluster' 
 import GmapMarkerWithLabel from './googleComp/marker' 
 import mGmapInfoWindow from './googleComp/overlay/infoWindow' 
+import TmxGmapCluster from '././gMapComps/gMapLibs/cluster'
+import TmxGmapMarker from './gMapComps/gMapLibs/marker'
+import GmapMap from './gMapComps/components/map'
 
 export default {
   name: 'gmap',
@@ -83,11 +85,14 @@ export default {
     GmapCluster,
     GmapMarkerWithLabel,
     mGmapInfoWindow,
+    TmxGmapCluster,
+    TmxGmapMarker,
+    GmapMap
   },
   data() {
     // 插入 10 个随机点
     const markers = []
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 3; i++) {
       const position = {lng: Math.random()*0.04 + 116.404, lat: Math.random()*0.04 + 39.915}
       // position.icon = {
       //   // path: 'M22 10.5c0 .895-.13 1.76-.35 2.588C20.025 20.723 13.137 28.032 11 28 9.05 28 3.2 21.28.926 14.71.334 13.42 0 11.997 0 10.5c0-.104.013-.206.017-.31C.014 10.117 0 10.04 0 9.967c-.005-.67.065-1.112.194-1.398C1.144 3.692 5.617 0 11 0c5.416 0 9.906 3.74 10.82 8.657.112.29.18.696.18 1.31 0 .083-.013.167-.015.25.003.095.015.188.015.283zM11 5.833c-2.705 0-4.898 2.09-4.898 4.667S8.295 15.167 11 15.167s4.898-2.09 4.898-4.667c0-2.578-2.193-4.667-4.898-4.667z',

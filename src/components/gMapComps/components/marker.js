@@ -1,4 +1,5 @@
 import mapElementFactory from './mapElementFactory.js'
+
 const props = {
   animation: {
     twoWay: true,
@@ -22,23 +23,7 @@ const props = {
     default: false
   },
   icon: {
-    twoWay: true,
-    // default:()=>{
-    //   return {
-    //     anchor:new google.maps.Point(0, 0),
-    //     labelOrigin:new google.maps.Point(-8, -8),
-    //     path: google.maps.SymbolPath.CIRCLE,
-    //     scale: 6,
-    //     fillColor: '#3BC881',
-    //     fillOpacity: 1,
-    //     strokeColor: '#FFFFFF',
-    //     strokeWeight: 2
-    //   }
-    // }
-  },
-  position: {
-    type: Object,
-    twoWay: true,
+    twoWay: true
   },
   label: {
   },
@@ -51,6 +36,10 @@ const props = {
   },
   place: {
     type: Object
+  },
+  position: {
+    type: Object,
+    twoWay: true,
   },
   shape: {
     type: Object,
@@ -68,9 +57,6 @@ const props = {
     twoWay: true,
     default: true,
   },
-  mKey: {
-    type: String
-  }
 }
 
 const events = [
@@ -101,25 +87,8 @@ const events = [
 export default mapElementFactory({
   mappedProps: props,
   events,
-  // name: 'LabelMarker',
   name: 'marker',
-  ctr: () => {
-    //增加marker的key方法 start
-    // google.maps.Marker.prototype.setLabel = function(val){
-    //   console.log(this);
-    //   console.log(this.getPosition());
-    //   console.log(val);
-    // }
-    // require('./labelMarker')
-    google.maps.Marker.prototype.setMKey = function(val){
-      this.sn = val
-    }
-    google.maps.Marker.prototype.getMKey = function(){
-      return this.sn
-    }
-    return google.maps.Marker
-    // return google.maps.LabelMarker
-  },
+  ctr: () => google.maps.Marker,
 
   inject: {
     '$clusterPromise': {
@@ -142,37 +111,24 @@ export default mapElementFactory({
 
   destroyed () {
     if (!this.$markerObject) { return }
-    // if (!this.$LabelMarkerObject) { return }
+
     if (this.$clusterObject) {
       // Repaint will be performed in `updated()` of cluster
-      // this.$clusterObject.removeMarker(this.$LabelMarkerObject, true)
       this.$clusterObject.removeMarker(this.$markerObject, true)
     } else {
-      // this.$LabelMarkerObject.setMap(null)
       this.$markerObject.setMap(null)
     }
   },
 
   beforeCreate (options) {
-    console.log('marker ');
     if (this.$clusterPromise) {
       options.map = null
     }
-    
+
     return this.$clusterPromise
   },
-  
+
   afterCreate (inst) {
-    let vmthis = this
-    google.maps.event.addListener(inst,'click',function() {
-      vmthis.$emit('click',inst)
-    });
-    google.maps.event.addListener(inst,'mouseover',function(e) {
-      vmthis.$emit('mouseover',{e,inst})
-    });
-    google.maps.event.addListener(inst,'rightclick',function(e) {
-      vmthis.$emit('contextmenu',e)
-    });
     if (this.$clusterPromise) {
       this.$clusterPromise.then((co) => {
         co.addMarker(inst)

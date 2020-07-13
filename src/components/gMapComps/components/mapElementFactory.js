@@ -1,6 +1,6 @@
 import bindEvents from '../utils/bindEvents.js'
 import {bindProps, getPropsValues} from '../utils/bindProps.js'
-import MapElementMixin from '../components/mapElementMixin'
+import MapElementMixin from './mapElementMixin'
 
 /**
  *
@@ -70,7 +70,6 @@ export default function (options) {
     },
     render () { return '' },
     provide () {
-      console.log(this.$mapPromise);
       const promise = this.$mapPromise.then((map) => {
         // Infowindow needs this to be immediately available
         this.$map = map
@@ -95,24 +94,12 @@ export default function (options) {
         const ConstructorObject = ctr()
         // https://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible
         this[instanceName] = ctrArgs
-        ? new (Function.prototype.bind.call(
-          ConstructorObject,
-          null,
-          ...ctrArgs(options, getPropsValues(this, props || {}))
+          ? new (Function.prototype.bind.call(
+            ConstructorObject,
+            null,
+            ...ctrArgs(options, getPropsValues(this, props || {}))
           ))()
           : new ConstructorObject(options)
-        // if (instanceName=='$infoWindowObject') {
-        //   console.log(this[instanceName],'this[instanceName]');
-        // }
-        if (instanceName=='$markerObject') {
-          // console.log(this[instanceName],instanceName+'实力');
-          this[instanceName].setMKey(options.mKey)
-        }
-        if (instanceName=='$LabelMarkerObject') {
-          // console.log(options,'合并后的options');
-          // console.log(this[instanceName],instanceName+'实力');
-          this[instanceName].setMKey(options.mKey)
-        }
 
         bindProps(this, this[instanceName], mappedProps)
         bindEvents(this, this[instanceName], events)

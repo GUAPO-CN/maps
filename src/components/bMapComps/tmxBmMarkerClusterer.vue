@@ -8,12 +8,17 @@
 /* eslint-disable */
 import MarkerClusterer from './bMapLibs/markerclusterer'
 import {createSize} from 'vue-baidu-map/components/base/factory.js'
-import commonMixin from 'vue-baidu-map/components/base/mixins/common.js'
+import commonMixin from './base/mixins/common.js'
 import '@/assets/less/map.less'
 
 export default {
   name: 'BmlMarkerClusterer',
   mixins: [commonMixin('markerClusterer')],
+  data(){
+    return{
+      num:0,
+    }
+  },
   props: {
     gridSize: {
       type: Object
@@ -71,32 +76,37 @@ export default {
   },
   created()  {
     const _vmthis = this
-    MarkerClusterer.prototype._redraw = function () {
-      this._clearLastClusters()
-      this._createClusters()
-      this.setVm(_vmthis)
-    };
+    // MarkerClusterer.prototype._redraw = function () {
+    //   this._clearLastClusters()
+    //   this._createClusters()
+    //   this.setVm(_vmthis)
+    // };
   },
   beforeCreate () {
     this.preventChildrenRender = true
   },
   methods: {
     load () {
-      const {BMap, map, gridSize, minClusterSize, maxZoom, styles, averageCenter} = this
-      this.originInstance = new MarkerClusterer(map, {
-        gridSize: gridSize && createSize(BMap, gridSize),
-        maxZoom,
-        minClusterSize: minClusterSize && createSize(BMap, minClusterSize),
-        styles: styles.map(item => {
-          item.size = createSize(BMap, item.size)
-          return item
-        }),
-        isAverageCenter: averageCenter
-      })
-      this.$nextTick(() => {
-        const markers = this.$children.map(inst => inst.originInstance).filter(marker => marker instanceof BMap.Marker)
-        this.originInstance.addMarkers(markers)
-      })
+      console.log(this.num,'num');
+      if(this.num < 2){
+        this.num++
+        const {BMap, map, gridSize, minClusterSize, maxZoom, styles, averageCenter} = this
+        this.originInstance = new MarkerClusterer(map, {
+          gridSize: gridSize && createSize(BMap, gridSize),
+          maxZoom,
+          minClusterSize: minClusterSize && createSize(BMap, minClusterSize),
+          styles: styles.map(item => {
+            item.size = createSize(BMap, item.size)
+            return item
+          }),
+          isAverageCenter: averageCenter
+        })
+        // console.log(this.originInstance);
+        this.$nextTick(() => {
+          const markers = this.$children.map(inst => inst.originInstance).filter(marker => marker instanceof BMap.Marker)
+          this.originInstance.addMarkers(markers)
+        })
+      }
     }
   }
 }

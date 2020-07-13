@@ -8,7 +8,7 @@
     :scroll-wheel-zoom="mapOpts['scroll-wheel-zoom']"
     @click="mapClick"
     >
-      <!-- <tmx-bml-marker-clusterer 
+      <tmx-bml-marker-clusterer 
         :averageCenter="clustererOpts.averageCenter" 
         :styles="clustererOpts.styles"
         @contextmenu="contextmenu"
@@ -16,7 +16,7 @@
         @mouseout="infoWindowClose"
         @click="infoWindowClose"
         >
-        <bm-marker 
+        <tmx-bm-marker 
           v-for="(marker,index) of markers" 
           :key="index"
           :position="{lng: marker.lng, lat: marker.lat}"
@@ -24,18 +24,18 @@
           @mouseover="infoWindowOpen(marker,'marker')"
           @mouseout="infoWindowClose"
         >
-          <tmx-bm-label 
+          <!-- <tmx-bm-label 
             :content="labelOpts.content" 
             :labelStyle="labelOpts.labelStyle" 
             :offset="labelOpts.offset"
-          />
-        </bm-marker>
+          /> -->
+        </tmx-bm-marker>
       </tmx-bml-marker-clusterer>
       <tmx-bml-over-lay
         :ref="infoWindowOpts.ref"
         :infoWindowOpts = 'infoWindowOpts'
-      ></tmx-bml-over-lay> -->
-      <tmxBmPolyLine
+      ></tmx-bml-over-lay>
+      <!-- <tmxBmPolyLine
         :path="path"
         stroke-color="black"
         :stroke-opacity="0.3"
@@ -54,7 +54,7 @@
           :labelStyle="labelOpts.labelStyle" 
           :offset="labelOpts.offset"
         />
-      </bm-marker>
+      </bm-marker> -->
     </baidu-map>
   </div>
 </template>
@@ -63,10 +63,14 @@
 import { BmlMarkerClusterer } from 'vue-baidu-map'
 //baidu
 //方案一 自建 bmc。vue文件
-import tmxBmlMarkerClusterer from './baiduComp/tmxBmlMarkerClusterer'
-import tmxBmLabel from './baiduComp/tmxBmLabel'
-import tmxBmlOverLay from './baiduComp/tmxBmlOverLay'
-import tmxBmPolyLine from './baiduComp/tmxBmPolyLine'
+import tmxBmlMarkerClusterer from './bMapComps/tmxBmMarkerClusterer'
+import tmxBmLabel from './bMapComps/tmxBmLabel'
+import tmxBmlOverLay from './bMapComps/tmxBmOverLay'
+import tmxBmMarker from './bMapComps/tmxBmMarker'
+// import tmxBmlMarkerClusterer from './baiduComp/tmxBmlMarkerClusterer'
+// import tmxBmLabel from './baiduComp/tmxBmLabel'
+// import tmxBmlOverLay from './baiduComp/tmxBmlOverLay'
+// import tmxBmPolyLine from './baiduComp/tmxBmPolyLine'
 
 //方案二、三非自建 bmc。vue文件
 // import MarkerClusterer from 'bmaplib.markerclusterer'
@@ -83,13 +87,13 @@ export default {
     tmxBmLabel,
     tmxBmlOverLay,
     BmlMarkerClusterer,
-    tmxBmPolyLine
+    tmxBmMarker,
   },
   data() {
     // 插入 10 个随机点
     const markers = []
     let _this = this
-    for (let i = 0; i < 400; i++) {  
+    for (let i = 0; i < 30000; i++) {  
       const position = {lng: Math.random()*0.04 + 116.404, lat: Math.random()*0.04 + 39.915}
       // position.icon = {
       //   // path: 'M22 10.5c0 .895-.13 1.76-.35 2.588C20.025 20.723 13.137 28.032 11 28 9.05 28 3.2 21.28.926 14.71.334 13.42 0 11.997 0 10.5c0-.104.013-.206.017-.31C.014 10.117 0 10.04 0 9.967c-.005-.67.065-1.112.194-1.398C1.144 3.692 5.617 0 11 0c5.416 0 9.906 3.74 10.82 8.657.112.29.18.696.18 1.31 0 .083-.013.167-.015.25.003.095.015.188.015.283zM11 5.833c-2.705 0-4.898 2.09-4.898 4.667S8.295 15.167 11 15.167s4.898-2.09 4.898-4.667c0-2.578-2.193-4.667-4.898-4.667z',
@@ -138,7 +142,7 @@ export default {
               isClassUse:true,
               // url:'https://www.baidu.com/img/flexible/logo/pc/result.png',
               // size: { width:10,height:10},
-              class:'cluster_class'
+              class:'cluster_text'
             }
           ],
           averageCenter:true,

@@ -6,7 +6,7 @@
 
 <script>
 /* eslint-disable */
-import commonMixin from 'vue-baidu-map/components/base/mixins/common.js'
+import commonMixin from './base/mixins/common.js'
 import bindEvents from 'vue-baidu-map/components/base/bindEvent.js'
 import {createLabel, createIcon, createPoint} from 'vue-baidu-map/components/base/factory.js'
 
