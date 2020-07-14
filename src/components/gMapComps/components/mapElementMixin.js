@@ -22,7 +22,9 @@ export default {
     // component, putting this code in provide() ensures that the $map is
     // already set by the time the
     // component's provide() is called.
+    console.log('依赖准备');
     this.$mapPromise.then((map) => {
+      console.log(this.name,'map mixins');
       this.$map = map
     })
 

@@ -105,6 +105,7 @@ export default mapElementFactory({
   },
 
   afterCreate (inst) {
+    console.warn('afterCreate cluster');
     const reinsertMarkers = () => {
       const oldMarkers = inst.getMarkers()
       inst.clearMarkers()
@@ -119,12 +120,14 @@ export default mapElementFactory({
   },
 
   updated () {
+    console.warn('updated cluster');
     if (this.$clusterObject) {
       this.$clusterObject.repaint()
     }
   },
 
   beforeDestroy () {
+    console.warn('updated beforeDestroy');
     /* Performance optimization when destroying a large number of markers */
     this.$children.forEach(marker => {
       if (marker.$clusterObject === this.$clusterObject) {

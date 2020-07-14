@@ -52,7 +52,7 @@
           (Your content here)
         </div>
       </mGmapInfoWindow> -->
-      <mGmapInfoWindow 
+      <!-- <mGmapInfoWindow 
         ref="infowindow"
         :options="goinfo_Options" 
         :position="goinfo_Position" 
@@ -62,7 +62,7 @@
         <div class="google-info-window" >
           (Your content here)
         </div>
-      </mGmapInfoWindow>
+      </mGmapInfoWindow> -->
     </GmapMap>
   </div>
 </template>

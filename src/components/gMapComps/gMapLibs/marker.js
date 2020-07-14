@@ -154,8 +154,8 @@ export default mapElementFactory({
   },
 
   beforeCreate (options) {
-    console.log('marker ');
-    if (this.$clusterPromise) {
+    console.warn('beforeCreate marker');
+    if (this.$clusterPromise) { //如果marker点被cluster包裹，清除options.map达到轻量化options对象
       options.map = null
     }
     
@@ -163,6 +163,7 @@ export default mapElementFactory({
   },
   
   afterCreate (inst) {
+    console.warn('afterCreate marker');
     let vmthis = this
     google.maps.event.addListener(inst,'click',function() {
       vmthis.$emit('click',inst)
@@ -175,9 +176,13 @@ export default mapElementFactory({
     });
     if (this.$clusterPromise) {
       this.$clusterPromise.then((co) => {
+        // console.log(co,'co');
         co.addMarker(inst)
         this.$clusterObject = co
       })
     }
+  },
+  mounted() {
+    console.warn('mounted marker')
   },
 })

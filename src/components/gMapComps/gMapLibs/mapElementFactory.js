@@ -70,8 +70,8 @@ export default function (options) {
     },
     render () { return '' },
     provide () {
-      console.log(this.$mapPromise);
       const promise = this.$mapPromise.then((map) => {
+        console.log('p1',promiseName);
         // Infowindow needs this to be immediately available
         this.$map = map
 
@@ -85,13 +85,13 @@ export default function (options) {
 
         if (beforeCreate) {
           const result = beforeCreate.bind(this)(options)
-
           if (result instanceof Promise) {
             return result.then(() => ({options}))
           }
         }
         return {options}
       }).then(({options}) => {
+        console.log('p2',promiseName);
         const ConstructorObject = ctr()
         // https://stackoverflow.com/questions/1606797/use-of-apply-with-new-operator-is-this-possible
         this[instanceName] = ctrArgs
@@ -122,6 +122,8 @@ export default function (options) {
         }
         return this[instanceName]
       })
+
+      console.log('provide ',promiseName ,'依赖准备就绪');
       this[promiseName] = promise
       return {[promiseName]: promise}
     },

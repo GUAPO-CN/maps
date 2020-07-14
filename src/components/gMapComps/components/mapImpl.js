@@ -95,14 +95,13 @@ export default {
 
   provide () {
     this.$mapPromise = new Promise((resolve, reject) => {
-      console.log('实例化map');
+      console.log('provide map依赖准备');
       this.$mapPromiseDeferred = { resolve, reject }
     })
     return {
       '$mapPromise': this.$mapPromise
     }
   },
-
   computed: {
     finalLat () {
       return this.center &&
@@ -124,8 +123,29 @@ export default {
       }
     }
   },
-
+  beforeCreate() {
+    console.log('beforeCreate map')
+  },
+  created() {
+    console.log('created map')
+  },
+  beforeMount() {
+    console.log('beforeMount map')
+  },
+  beforeUpdate() {
+    console.log('beforeUpdate map')
+  },
+  updated() {
+    console.log('updated map')
+  },
+  beforeDestroy() {
+    console.log('beforeDestroy map')
+  },
+  destroyed() {
+    console.log('destroyed map')
+  },
   mounted () {
+    console.log('map mounted');
     return this.$gmapApiPromiseLazy().then(() => {
       // getting the DOM element where to create the map
       const element = this.$refs['vue-map']
@@ -169,7 +189,7 @@ export default {
       this.$mapObject.addListener('bounds_changed', () => {
         this.$emit('bounds_changed', this.$mapObject.getBounds())
       })
-
+      console.log('map mounted 准备就绪 ');
       this.$mapPromiseDeferred.resolve(this.$mapObject)
 
       return this.$mapObject
@@ -181,5 +201,8 @@ export default {
   methods: {
     ...customMethods,
     ...linkedMethods,
+  },
+  inject(){
+    return {}
   },
 }
