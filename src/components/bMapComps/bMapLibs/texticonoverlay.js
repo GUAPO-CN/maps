@@ -750,7 +750,7 @@
     T.lang.inherits(TextIconOverlay, BMap.Overlay, 'TextIconOverlay');
     this._position = position;
     this._cluster = cluster;
-    this._vmthis = cluster._vmthis;
+    this._vmthis = cluster&&cluster._vmthis;
     this._text = text;
     this._options = options || {};
     this._styles = this._options['styles'] || [];
@@ -779,6 +779,7 @@
    *@return {HTMLElement} 返回覆盖物对应的HTML元素。
    */
   TextIconOverlay.prototype.initialize = function (map) {
+    console.log('object');
     this._map = map;
 
     this._domElement = document.createElement('div');

@@ -88,7 +88,7 @@ export default {
   methods: {
     load () {
       console.log(this.num,'num');
-      if(this.num < 2){
+      if(this.num <1){
         this.num++
         const {BMap, map, gridSize, minClusterSize, maxZoom, styles, averageCenter} = this
         this.originInstance = new MarkerClusterer(map, {
@@ -102,6 +102,7 @@ export default {
           isAverageCenter: averageCenter
         })
         // console.log(this.originInstance);
+        this.originInstance.setVm(this)
         this.$nextTick(() => {
           const markers = this.$children.map(inst => inst.originInstance).filter(marker => marker instanceof BMap.Marker)
           this.originInstance.addMarkers(markers)

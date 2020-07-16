@@ -31,10 +31,10 @@
           /> -->
         </tmx-bm-marker>
       </tmx-bml-marker-clusterer>
-      <tmx-bml-over-lay
+      <!-- <tmx-bml-over-lay
         :ref="infoWindowOpts.ref"
         :infoWindowOpts = 'infoWindowOpts'
-      ></tmx-bml-over-lay>
+      ></tmx-bml-over-lay> -->
       <!-- <tmxBmPolyLine
         :path="path"
         stroke-color="black"

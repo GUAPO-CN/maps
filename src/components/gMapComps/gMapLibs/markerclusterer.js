@@ -693,6 +693,7 @@ function MarkerClusterer(map, opt_markers, opt_options) {
   // look for it at the last possible moment. If it doesn't exist now then
   // there is no point going ahead :)
   this.extend(MarkerClusterer, google.maps.OverlayView);
+  console.log(this);
   opt_markers = opt_markers || [];
   opt_options = opt_options || {};
 

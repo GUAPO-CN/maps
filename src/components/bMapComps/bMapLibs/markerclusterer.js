@@ -101,10 +101,8 @@ var indexOf = function (item, source) {
  *    isAverangeCenter {Boolean} 聚合点的落脚位置是否是所有聚合在内点的平均值，默认为否，落脚在聚合内的第一个点<br />
  *    styles {Array<IconStyle>} 自定义聚合后的图标风格，请参考TextIconOverlay类<br />
  */
-let num = 0
+var isTextIconProtoed = false
  var MarkerClusterer = function (map, options) {
-   num++
-   console.log(num,'创建了两次 MarkerClusterer');
   try {
     BMap;
   } catch (e) {
@@ -114,6 +112,11 @@ let num = 0
     return;
   }
   this._map = map;
+  if(!isTextIconProtoed){
+    console.log('isTextIconProtoed');
+    new TextIconOverlay();//当前实例并没有继承到BMap.Overlay，第一次执行实例化后才继承了BMap.Overlay
+    isTextIconProtoed = true
+  }
   this._markers = [];
   this._clusters = [];
 
@@ -147,7 +150,6 @@ let num = 0
  * @return 无返回值。
  */
 MarkerClusterer.prototype.addMarkers = function (markers) {
-  // console.log(markers);
   if (!markers.length) {
     return
   }
@@ -194,13 +196,13 @@ MarkerClusterer.prototype._createClusters = function () {
   }
   var extendedBounds = getExtendedBounds(this._map, mapBounds, this._gridSize);
   //什么时候将 this._markers给清空了？
-  // console.log(this._markers,'this._markers');
+  console.log(this._markers,'this._markers');
   for (var i = 0, marker; marker = this._markers[i]; i++) {
     if (!marker.isInCluster && extendedBounds.containsPoint(marker.getPosition())) {
       this._addToClosestCluster(marker);
     }
   }
-  // console.log(this._clusters,'_clusters');
+  console.log(this._clusters,'_clusters');
   var len = this._markers.length;
   for (var i = 0; i < len; i++) {
     if (this._clusters[i]) {
@@ -229,7 +231,6 @@ MarkerClusterer.prototype._addToClosestCluster = function (marker) {
       }
     }
   }
-
   if (clusterToAddTo && clusterToAddTo.isMarkerInClusterBounds(marker)) {
     clusterToAddTo.addMarker(marker);
   } else {
@@ -332,7 +333,7 @@ MarkerClusterer.prototype.removeMarkers = function (markers) {
 MarkerClusterer.prototype.clearMarkers = function () {
   this._clearLastClusters();
   this._removeMarkersFromMap();
-  // console.log('object');
+  console.log('clearMarkers');
   this._markers = [];
 };
 
@@ -557,6 +558,7 @@ Cluster.prototype.render = function () {
     //   this._center = new BMap.Point(lng/l, lat/l);
     //   this.updateGridBounds();
     // } //计算新的Center
+    console.log(this._clusterMarker instanceof BMap.Overlay);
     this._map.addOverlay(this._clusterMarker);
     this._isReal = true;
     this.updateClusterMarker();

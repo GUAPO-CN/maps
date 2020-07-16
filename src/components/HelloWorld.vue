@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
-    <!-- <bmap></bmap> -->
-    <gmap></gmap>
+    <bmap></bmap>
+    <!-- <gmap></gmap> -->
   </div>
 </template>
 
