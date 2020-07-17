@@ -145,6 +145,10 @@ export default {
       this.originInstance.setMarkerStatus(val)
     },
   },
+  mounted(){
+    console.log('bindinParent');
+    this.$emit('bindinParent','parms')
+  },
   methods: {
     load () {
       console.log('load marker');
@@ -185,7 +189,7 @@ export default {
       overlay.setZIndex(zIndex)
       bindEvents.call(this, overlay)
       if (renderByParent) {
-        console.log('marker renderByParent');
+        console.log('marker renderByParent reload');
         $parent.reload()
       } else {
         map.addOverlay(overlay)

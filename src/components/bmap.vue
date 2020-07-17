@@ -15,6 +15,7 @@
         @mouseover="infoWindowOpen($event,'cluster')"
         @mouseout="infoWindowClose"
         @click="infoWindowClose"
+        @bindinParent="parentFN2"
         >
         <tmx-bm-marker 
           v-for="(marker,index) of markers" 
@@ -23,6 +24,7 @@
           :clicking='true'
           @mouseover="infoWindowOpen(marker,'marker')"
           @mouseout="infoWindowClose"
+          @bindinParent="parentFN"
         >
           <!-- <tmx-bm-label 
             :content="labelOpts.content" 
@@ -222,6 +224,15 @@ export default {
     // }
   },
   methods: {
+    parentFN2(){
+      console.log('parentFN2');
+    },
+    parentFN(){
+      console.log('parentFN');
+    },
+    readyaa(){
+      console.log('box readyaa');
+    },
     //baidu 
       contextmenu(marker){
         console.log('点击了右键')
