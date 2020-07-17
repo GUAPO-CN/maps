@@ -26,20 +26,24 @@ function destroyInstance () {
 class Mixin {
   constructor (prop) {
     this.methods = {
-      ready () {
+      readyaa (val) {
+        console.log('ready被触发 ',prop.type,val);
         const $parent = getParent(this.$parent)
         const BMap = this.BMap = $parent.BMap
         const map = this.map = $parent.map
         this.load()
-        this.$emit('ready', {
-          BMap,
-          map
-        })
+        console.log(this ,'this '+prop.type);
+        // this.$emit('ready', {
+        //   BMap,
+        //   map,
+        //   whoEmit:this.$vnode.tag
+        // })
       },
       transmitEvent (e) {
         this.$emit(e.type.replace(/^on/, ''), e)
       },
       reload () {
+        console.log('reload ',prop.type);
         this && this.BMap && this.$nextTick(() => {
           this.unload()
           this.$nextTick(this.load)
@@ -68,11 +72,19 @@ class Mixin {
       }
     }
     this.mounted = function () {
+      console.log('mounted ',prop.type);
       const $parent = getParent(this.$parent)
       const map = $parent.map
-      const {ready} = this
-      // console.log(map,'map');
-      map ? ready() : $parent.$on('ready', ready)
+      const {readyaa} = this
+      console.log(map,'map');
+      if(map){
+        console.log('self ready',prop.type);
+        // ready()
+      }else{
+        console.log( $parent,' 给父级 '+$parent.$vnode.tag+' 添加ready事件 ');
+        $parent.$on('readyaa', readyaa)
+      }
+      // map ? ready() : $parent.$on('ready', ready)
     }
     this.destroyed = destroyInstance
     this.beforeDestroy = destroyInstance

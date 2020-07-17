@@ -87,6 +87,7 @@ export default {
   },
   methods: {
     load () {
+      console.log('load cluster');
       console.log(this.num,'num');
       if(this.num <1){
         this.num++

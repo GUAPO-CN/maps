@@ -147,6 +147,7 @@ export default {
   },
   methods: {
     load () {
+      console.log('load marker');
       const {BMap, map, position, offset, icon, massClear, dragging, clicking, raiseOnDrag, draggingCursor, rotation, shadow, title, label, animation, top, renderByParent, $parent, zIndex} = this
       //增加marker的key方法 start
       BMap.Marker.prototype.setMarkerKey = function(val){
@@ -184,6 +185,7 @@ export default {
       overlay.setZIndex(zIndex)
       bindEvents.call(this, overlay)
       if (renderByParent) {
+        console.log('marker renderByParent');
         $parent.reload()
       } else {
         map.addOverlay(overlay)
