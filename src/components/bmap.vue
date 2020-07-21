@@ -2,20 +2,22 @@
   <div class="hello">
     <!-- baidu -->
     <baidu-map 
-    class="bm-view" 
-    :center="mapOpts.center" 
-    :zoom="mapOpts.zoom"
-    :scroll-wheel-zoom="mapOpts['scroll-wheel-zoom']"
-    @click="mapClick"
+      class="bm-view" 
+      :center="mapOpts.center" 
+      :zoom="mapOpts.zoom"
+      :scroll-wheel-zoom="mapOpts['scroll-wheel-zoom']"
+      :mapStyle="{style : 'dark'}"
+      @click="mapClick"
+      @moveend="(e) => syncCenterAndZoom(e)"
     >
       <tmx-bml-marker-clusterer 
+        ref="cluster"
         :averageCenter="clustererOpts.averageCenter" 
         :styles="clustererOpts.styles"
         @contextmenu="contextmenu"
         @mouseover="infoWindowOpen($event,'cluster')"
         @mouseout="infoWindowClose"
         @click="infoWindowClose"
-        @bindinParent="parentFN2"
         >
         <tmx-bm-marker 
           v-for="(marker,index) of markers" 
@@ -24,7 +26,6 @@
           :clicking='true'
           @mouseover="infoWindowOpen(marker,'marker')"
           @mouseout="infoWindowClose"
-          @bindinParent="parentFN"
         >
           <!-- <tmx-bm-label 
             :content="labelOpts.content" 
@@ -33,6 +34,25 @@
           /> -->
         </tmx-bm-marker>
       </tmx-bml-marker-clusterer>
+
+      <!-- <tmx-bml-marker-clusterer 
+        ref="cluster"
+        :averageCenter="clustererOpts.averageCenter" 
+        :styles="clustererOpts.styles"
+        @contextmenu="contextmenu"
+        @mouseover="infoWindowOpen($event,'cluster')"
+        @mouseout="infoWindowClose"
+        @click="infoWindowClose"
+        >
+          <myMarker
+            v-for="(marker,index) of markers" 
+            :key="index"
+            :position="{lng: marker.lng, lat: marker.lat}"
+          >
+          </myMarker>
+      </tmx-bml-marker-clusterer> -->
+
+
       <!-- <tmx-bml-over-lay
         :ref="infoWindowOpts.ref"
         :infoWindowOpts = 'infoWindowOpts'
@@ -65,6 +85,7 @@
 import { BmlMarkerClusterer } from 'vue-baidu-map'
 //baidu
 //方案一 自建 bmc。vue文件
+import myMarker from './bMapComps/divMarker/myMarker'
 import tmxBmlMarkerClusterer from './bMapComps/tmxBmMarkerClusterer'
 import tmxBmLabel from './bMapComps/tmxBmLabel'
 import tmxBmlOverLay from './bMapComps/tmxBmOverLay'
@@ -91,53 +112,20 @@ export default {
     tmxBmlOverLay,
     BmlMarkerClusterer,
     tmxBmMarker,
-    baiduMap
+    baiduMap,
+    myMarker
   },
   data() {
-    // 插入 10 个随机点
-    const markers = []
-    let _this = this
-    for (let i = 0; i < 1; i++) {  
-      const position = {lng: Math.random()*0.04 + 116.404, lat: Math.random()*0.04 + 39.915}
-      // position.icon = {
-      //   // path: 'M22 10.5c0 .895-.13 1.76-.35 2.588C20.025 20.723 13.137 28.032 11 28 9.05 28 3.2 21.28.926 14.71.334 13.42 0 11.997 0 10.5c0-.104.013-.206.017-.31C.014 10.117 0 10.04 0 9.967c-.005-.67.065-1.112.194-1.398C1.144 3.692 5.617 0 11 0c5.416 0 9.906 3.74 10.82 8.657.112.29.18.696.18 1.31 0 .083-.013.167-.015.25.003.095.015.188.015.283zM11 5.833c-2.705 0-4.898 2.09-4.898 4.667S8.295 15.167 11 15.167s4.898-2.09 4.898-4.667c0-2.578-2.193-4.667-4.898-4.667z',
-      //   path: google.maps.SymbolPath.CIRCLE,
-      //   fillColor: '#E84643',
-      //   fillOpacity: 1,
-      //   strokeColor: 'blue',
-      // }
-      markers.push(position)
-    }
-    // let time = 0
-    // let timer = setInterval(()=>{
-    //   time++
-    //   if(time > 1000){
-    //     clearInterval(timer)
-    //   }
-    //   for (let i = 0; i < 10; i++) {  
-    //     const position = {lng: Math.random()*0.04 + 116.404, lat: Math.random()*0.04 + 39.915}
-    //     // position.icon = {
-    //     //   // path: 'M22 10.5c0 .895-.13 1.76-.35 2.588C20.025 20.723 13.137 28.032 11 28 9.05 28 3.2 21.28.926 14.71.334 13.42 0 11.997 0 10.5c0-.104.013-.206.017-.31C.014 10.117 0 10.04 0 9.967c-.005-.67.065-1.112.194-1.398C1.144 3.692 5.617 0 11 0c5.416 0 9.906 3.74 10.82 8.657.112.29.18.696.18 1.31 0 .083-.013.167-.015.25.003.095.015.188.015.283zM11 5.833c-2.705 0-4.898 2.09-4.898 4.667S8.295 15.167 11 15.167s4.898-2.09 4.898-4.667c0-2.578-2.193-4.667-4.898-4.667z',
-    //     //   path: google.maps.SymbolPath.CIRCLE,
-    //     //   fillColor: '#E84643',
-    //     //   fillOpacity: 1,
-    //     //   strokeColor: 'blue',
-    //     // }
-    //     markers.push(position)
-    //     _this.$set(_this,'markers',markers)
-    //   }
-      
-    // },10)
     return {
       path:[{lng: 116.404, lat: 39.915},
         {lng: 116.405, lat: 39.920},
         {lng: 116.423493, lat: 39.907445}],
       //baidu 
-        markers: markers,
+        markers: [],
 
         mapOpts:{
           zoom: 14,
-          center: '北京',
+          center: '深圳市南山区',
           'scroll-wheel-zoom': true
         },
 
@@ -224,15 +212,6 @@ export default {
     // }
   },
   methods: {
-    parentFN2(){
-      console.log('parentFN2');
-    },
-    parentFN(){
-      console.log('parentFN');
-    },
-    readyaa(){
-      console.log('box readyaa');
-    },
     //baidu 
       contextmenu(marker){
         console.log('点击了右键')
@@ -251,7 +230,20 @@ export default {
         this.infoWindowOpts.show = false
       },
       mapClick(){
-
+        },
+      syncCenterAndZoom(){
+        let _this = this
+        //清空markers
+        let markers = []
+        //请求数据
+        setTimeout(() => {
+          for (let i = 0; i < 55; i++) {  
+            const position = {lng: Math.random()*0.04 + 113.920664, lat: Math.random()*0.04 + 22.503938}
+            markers.push(position)
+          }
+          this.markers = markers
+          this.$refs.cluster.num = 0
+        }, 1000);
       }
   },
 }
@@ -260,5 +252,6 @@ export default {
 .bm-view {
   width: 100%;
   height: 800px;
+  margin-top: -100px;
 }
 </style>

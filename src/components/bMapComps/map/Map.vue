@@ -230,11 +230,12 @@ export default {
       // 此处强行初始化一次地图 回避一个由于错误的 center 字符串导致初始化失败抛出的错误
       map.reset()
       map.centerAndZoom(getCenterPoint(), zoom)
-      console.log('map init',this);
+      // console.log('map init',this);
       this.$emit('ready', {BMap, map,whoEmit:this.$vnode.tag})
       // Debug
       // global.map = map
       // global.mapComponent = this
+      require('../divMarker/divMarker').default
     },
     getCenterPoint () {
       const {center, BMap} = this
@@ -277,7 +278,6 @@ export default {
     }
   },
   mounted () {
-    console.log('mounted map');
     this.reset()
   },
   data () {

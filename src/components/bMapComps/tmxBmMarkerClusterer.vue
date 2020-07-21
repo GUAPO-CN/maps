@@ -87,7 +87,6 @@ export default {
   },
   methods: {
     load () {
-      console.log('load cluster');
       console.log(this.num,'num');
       if(this.num <1){
         this.num++
@@ -106,6 +105,7 @@ export default {
         this.originInstance.setVm(this)
         this.$nextTick(() => {
           const markers = this.$children.map(inst => inst.originInstance).filter(marker => marker instanceof BMap.Marker)
+          // const markers = this.$children.map(inst => inst.originInstance).filter(marker => marker instanceof BMap.divMarker)
           this.originInstance.addMarkers(markers)
         })
       }

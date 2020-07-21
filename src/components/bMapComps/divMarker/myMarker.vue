@@ -6,12 +6,13 @@
 
 <script>
 /* eslint-disable */
-import commonMixin from './base/mixins/common.js'
+// import {divMarker,hasExtendObj} from './divMarker'
+import commonMixin from '../base/mixins/common.js'
 import bindEvents from 'vue-baidu-map/components/base/bindEvent.js'
 import {createLabel, createIcon, createPoint} from 'vue-baidu-map/components/base/factory.js'
 
 export default {
-  name: 'bm-marker',
+  name: 'my-marker',
   mixins: [commonMixin('overlay')],
   props: {
     position: {},
@@ -152,51 +153,39 @@ export default {
   methods: {
     load () {
       const {BMap, map, position, offset, icon, massClear, dragging, clicking, raiseOnDrag, draggingCursor, rotation, shadow, title, label, animation, top, renderByParent, $parent, zIndex} = this
-      //增加marker的key方法 start
-      BMap.Marker.prototype.setMarkerKey = function(val){
-        this.sn = val
-      }
-      BMap.Marker.prototype.getMarkerKey = function(){
-        return this.sn
-      }
-      BMap.Marker.prototype.setMarkerStatus = function(val){
-        this.mStatus = val
-      }
-      BMap.Marker.prototype.getMarkerStatus = function(){
-        return this.mStatuss
-      }
-      //增加marker的key方法 end
-
       //1.实例化marker
-      const overlay = new BMap.Marker(new BMap.Point(position.lng, position.lat), {
-        offset,
-        icon: icon && createIcon(BMap, icon),
-        enableMassClear: massClear,
-        enableDragging: dragging,
-        enableClicking: clicking,
-        raiseOnDrag,
-        draggingCursor,
-        rotation,
-        shadow,
-        title
-      })
+      // const overlay = new divMarker(new BMap.Point(position.lng, position.lat), {
+      //   offset,
+      //   icon: icon && createIcon(BMap, icon),
+      //   enableMassClear: massClear,
+      //   enableDragging: dragging,
+      //   enableClicking: clicking,
+      //   raiseOnDrag,
+      //   draggingCursor,
+      //   rotation,
+      //   shadow,
+      //   title
+      // })
+      var txt = "银湖海岸城", mouseoverTxt = txt + " " + parseInt(Math.random() * 1000,10) + "套" ;
+      const overlay = new BMap.divMarker(new BMap.Point(position.lng, position.lat), "银湖海岸城",mouseoverTxt)
       //设置marker的key
       overlay.setMarkerKey(this.mKey)
       overlay.setMarkerStatus(this.mStatus)
-
       this.originInstance = overlay
-      label && overlay && overlay.setLabel(createLabel(BMap, label))
-      overlay.setTop(top)
-      overlay.setZIndex(zIndex)
-      bindEvents.call(this, overlay)
+
+      // label && overlay && overlay.setLabel(createLabel(BMap, label))
+      // overlay.setTop(top)
+      // overlay.setZIndex(zIndex)
+      // bindEvents.call(this, overlay)
+
       if (renderByParent) {
-        console.log('marker renderByParent reload');
+        // console.log('marker renderByParent reload');
         $parent.reload()
       } else {
         //2.添加marker
         map.addOverlay(overlay)
       }
-      overlay.setAnimation(global[animation])
+      // overlay.setAnimation(global[animation])
     }
   }
 }

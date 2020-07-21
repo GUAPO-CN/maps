@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>覆盖物容器</title>
+  <style type="text/css">
+    html {
+      height: 100%
+    }
+
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px
+    }
+
+    #allmap {
+      height: 100%
+    }
+  </style>
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=tDWb8ufFSg5a9gNW0L9i4vIdu2FIFEi3">
+  </script>
+  <script type="text/javascript" src="TextIconOverlay.js" >
+  </script>
+  <script type="text/javascript" src="MarkerClusterer.js">
+  // <script type="text/javascript" src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer.js">
+  </script>
+</head>
+
+<body>
+  <div id="allmap"></div>
+  <script type="text/javascript">
+    // 百度地图API功能
+      var map = new BMap.Map("allmap");
+      var point = new BMap.Point(116.404, 39.915);
+      map.centerAndZoom(point, 15);
+      map.enableScrollWheelZoom(true);
+
+
+    //图标标注
+      var marker = new BMap.Marker(new BMap.Point(116.404, 39.915)); // 创建点
+      map.addOverlay(marker);            //增加点
+
+
+    //矢量图形
+      var circle = new BMap.Circle(new BMap.Point(116.404, 39.915),500,{strokeColor:"blue", strokeWeight:6, strokeOpacity:0.5}); //创建圆
+      map.addOverlay(circle);            //增加圆
+
+
+    //文本标注
+      var opts = {
+        position : point,    // 指定文本标注所在的地理位置
+        offset   : new BMap.Size(-30, -30)    //设置文本偏移量
+      }
+      var label = new BMap.Label("欢迎使用百度地图，这是一个简单的文本标注哦~", opts);  // 创建文本标注对象
+        label.setStyle({
+          color : "red",
+          fontSize : "12px",
+          height : "20px",
+          lineHeight : "20px",
+          fontFamily:"微软雅黑"
+        });
+      map.addOverlay(label);  
+
+
+    //信息窗口
+      var opts = {
+        width : 200,     // 信息窗口宽度
+        height: 100,     // 信息窗口高度
+        title : "海底捞王府井店" , // 信息窗口标题
+        enableMessage:true,//设置允许信息窗发送短息
+        message:"亲耐滴，晚上一起吃个饭吧？戳下面的链接看下地址喔~"
+      }
+      var infoWindow = new BMap.InfoWindow("地址：北京市东城区王府井大街88号乐天银泰百货八层", opts);  // 创建信息窗口对象 
+      map.openInfoWindow(infoWindow,point); //开启信息窗口
+
+
+    //折线
+      var sy = new BMap.Symbol(BMap_Symbol_SHAPE_BACKWARD_OPEN_ARROW, {
+        scale: 0.6,//图标缩放大小
+        strokeColor:'#fff',//设置矢量图标的线填充颜色
+        strokeWeight: '2',//设置线宽
+      });
+      var icons = new BMap.IconSequence(sy, '10', '30');
+      // 创建polyline对象
+      var pois = [
+        new BMap.Point(116.350658,39.938285),
+        new BMap.Point(116.386446,39.939281),
+        new BMap.Point(116.389034,39.913828),
+        new BMap.Point(116.442501,39.914603)
+      ];
+      var polyline =new BMap.Polyline(pois, {
+        enableEditing: false,//是否启用线编辑，默认为false
+        enableClicking: true,//是否响应点击事件，默认为true
+        icons:[icons],
+        strokeWeight:'8',//折线的宽度，以像素为单位
+        strokeOpacity: 0.8,//折线的透明度，取值范围0 - 1
+        strokeColor:"#18a45b" //折线颜色
+      });
+      map.addOverlay(polyline);          //增加折线
+
+
+    console.log(map.getPanes(),'覆盖物容器集合');
+
+  </script>
+</body>
+
+</html>

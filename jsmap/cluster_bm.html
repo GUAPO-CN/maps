@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>聚合点</title>
+  <style type="text/css">
+    html {
+      height: 100%
+    }
+
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px
+    }
+
+    #container {
+      height: 100%
+    }
+  </style>
+  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=tDWb8ufFSg5a9gNW0L9i4vIdu2FIFEi3">
+  </script>
+  <script type="text/javascript" src="TextIconOverlay.js" >
+  </script>
+  <script type="text/javascript" src="MarkerClusterer.js">
+  // <script type="text/javascript" src="http://api.map.baidu.com/library/MarkerClusterer/1.2/src/MarkerClusterer.js">
+  </script>
+</head>
+
+<body>
+  <div id="container"></div>
+  <script type="text/javascript">
+    // 百度地图API功能
+    var map = new BMap.Map("container");
+    map.centerAndZoom(new BMap.Point(116.404, 39.915), 16);
+    map.enableScrollWheelZoom();
+    // map.setMapStyleV2({     
+    //   styleId: '712c577cd14cefa3ed57bc2ffb70854d'
+    // });
+
+    // var MAX = 92000;
+    var MAX = 92;
+    var markers = [];
+    var pt = null;
+    var i = 0;
+    for (; i < MAX; i++) {
+      var numx = 116.404;
+      var numy = 39.915;
+      numx +=Math.random()*0.02;
+      numy +=Math.random()*0.02;
+      pt = new BMap.Point( numx ,numy);
+      markers.push(new BMap.Marker(pt));
+	    // map.addOverlay(new BMap.Marker(pt));  
+      // var circle = new BMap.Circle(pt,100); //单位 米
+    }
+    //最简单的用法，生成一个marker数组，然后调用markerClusterer类即可。
+    var markerClusterer = new BMapLib.MarkerClusterer(map, {
+      markers: markers,
+      gridSize: 100, //单位 像素 相当于浏览器的px
+      isAverageCenter: true
+    });
+
+    // var pStart = new BMap.Point(116.392214,39.918985);
+    // var pEnd = new BMap.Point(116.41478,39.911901);
+    // var rectangle = new BMap.Polygon([
+    //   new BMap.Point(pStart.lng,pStart.lat),
+    //   new BMap.Point(pEnd.lng,pStart.lat),
+    //   new BMap.Point(pEnd.lng,pEnd.lat),
+    //   new BMap.Point(pStart.lng,pEnd.lat)
+    // ], {strokeColor:"blue", strokeWeight:2, strokeOpacity:0.5});  //创建矩形
+    // map.addOverlay(rectangle);           //增加多边形
+
+    // map.addEventListener('zoomend',function(e) {
+    //   console.log('map zoom',map.getZoom(),);
+    //   console.log('map size',map.getSize());
+    //   console.log('map getBounds',map.getBounds(),);
+    //   console.log('markerClusterer gridsize',markerClusterer.getGridSize(),);
+    //   console.log('markerClusterer',markerClusterer,);
+    //   // var offsetSize = new BMap.Size(10, 0);
+    //   // console.log('offsetSize',offsetSize,);
+    //   var boundsss = map.getBounds()
+    //   var marker1 = new BMap.Marker(new BMap.Point( boundsss.El.lng ,boundsss.El.lat ));
+    //   var marker2 = new BMap.Marker(new BMap.Point( boundsss.ql.lng ,boundsss.ql.lat ));
+    //   map.addOverlay(marker1); 
+    //   map.addOverlay(marker2); 
+    // })
+  </script>
+</body>
+
+</html>
